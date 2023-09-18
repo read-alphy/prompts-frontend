@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { API_HOST } from '../constants';
+import {WS_URL, API_BASE} from '../constants';
 
 
 function Submission({ id }) {
@@ -11,7 +11,7 @@ function Submission({ id }) {
     const [ws, setWs] = useState(null);
 
     const setupWebsocketListeners = () => {
-        const socket = new WebSocket(`ws://${API_HOST}/ws`);
+        const socket = new WebSocket(WS_URL);
         socket.addEventListener("message", (event) => {
             setResult(prevResult => prevResult + event.data)
         });
@@ -22,7 +22,7 @@ function Submission({ id }) {
     };
 
     const getSubmission = async (data) => {
-        const response = await fetch(`http://${API_HOST}/submissions/${id}`);
+        const response = await fetch(`${API_BASE}/submissions/${id}`);
         const body = await response.json();
         setPayload(body.payload);
         setPromptTemplate(body.prompt_template);
@@ -94,7 +94,7 @@ export function SubmissionList() {
     const [submissions, setSubmissions] = useState([]);
 
     const getSubmissions = async () => {
-        const response = await fetch(`http://${API_HOST}/submissions`);
+        const response = await fetch(`${API_BASE}/submissions`);
         let body = await response.json();
         setSubmissions(body.reverse());
     };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { API_HOST } from '../constants';
+import { API_BASE } from '../constants';
 
 export function Input() {
     const [payload, setPayload] = useState('');
@@ -10,7 +10,7 @@ export function Input() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch(`http://${API_HOST}/submissions`, {
+        const response = await fetch(`${API_BASE}/submissions`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
