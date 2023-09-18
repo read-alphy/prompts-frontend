@@ -41,3 +41,7 @@ textarea {
   width: 100%;
   height: 10em;
 }
+
+.inputTextareaHolder > textarea {
+  height: 30em;
+}

@@ -26,24 +26,45 @@ export function Input() {
 
         document.dispatchEvent(eventNewCompletion);
     }
+    
+    const transcriptPlaceholder = `Put the transcript here.
 
+If a prompt template is given, this is inserted into the {{ payload }} variable.
+
+If no prompt template is given, this is directly sent to the model.`;
+    const promptTemplatePlaceholder = `This is a Jinja2 template.
+
+When you put a transcript, it is inserted into the payload variable:
+
+{{ payload }}
+
+You can also use variables:
+
+Hello {{ name }}!`;
+    const parametersPlaceholder = `# This is a yaml file.
+
+# Parameters are passed to the model AND are used for the processing by the system. They will be used to configure the merge strategy later, for example
+
+name: Egemen
+age: 21
+`;
     return (
         <form onSubmit={handleSubmit}>
-            <div style={{display: 'flex', flexDirection: 'row', flexGrow: 1, gap: '2em', padding: '2em'}}>
-            <textarea
-                value={payload}
-                onChange={(e) => setPayload(e.target.value)}
-                placeholder="Put the transcript here"
-            />
-            <textarea
-                value={promptTemplate}
-                onChange={(e) => setPromptTemplate(e.target.value)}
-                placeholder="Prompt template in Jinja2 format" />
+            <div className='inputTextareaHolder' style={{display: 'flex', flexDirection: 'row', flexGrow: 1, gap: '2em', padding: '2em'}}>
+                <textarea
+                    value={payload}
+                    onChange={(e) => setPayload(e.target.value)}
+                    placeholder={transcriptPlaceholder}
+                />
+                <textarea
+                    value={promptTemplate}
+                    onChange={(e) => setPromptTemplate(e.target.value)}
+                    placeholder={promptTemplatePlaceholder} />
 
-            <textarea
-                value={parameters}
-                onChange={(e) => setParameters(e.target.value)}
-                placeholder="Parameters in yaml format" />
+                <textarea
+                    value={parameters}
+                    onChange={(e) => setParameters(e.target.value)}
+                    placeholder={parametersPlaceholder} />
             </div>
             <div style={{display: 'flex', flexDirection: 'row', justifyContent: "center"}}>
             <button type="submit" style={{width: 'auto', }}>Submit</button>
