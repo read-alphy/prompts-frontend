@@ -7,6 +7,17 @@ export default function Submission({ id }) {
     const [promptTemplate, setPromptTemplate] = useState('');
     const [parameters, setParameters] = useState('');
     const [result, setResult] = useState('');
+    const [model, setModel] = useState('');
+
+    const modelName = () => {
+        if (model === 'gpt-3.5-turbo') {
+            return 'GPT-3.5 Turbo';
+        } else if (model === 'gpt-4') {
+            return 'GPT-4';
+        } else {
+            return model;
+        }
+    }
 
     const [ws, setWs] = useState(null);
     
@@ -28,6 +39,7 @@ export default function Submission({ id }) {
         setPayload(body.payload);
         setPromptTemplate(body.prompt_template);
         setParameters(body.parameters);
+        setModel(body.model);
 
         if (body.result) {
             setResult(body.result);
@@ -52,6 +64,7 @@ export default function Submission({ id }) {
             payload,
             promptTemplate,
             parameters,
+            model
         }});
         document.dispatchEvent(eventFill);
     }
@@ -94,6 +107,8 @@ export default function Submission({ id }) {
                         }
                     />
                     <div style={{display: "flex", justifyContent: "space-around"}}>
+                        <input type="text" value={modelName()} readonly style={{width: 'min-content'}}/>
+                        {/* <kbd className='secondary'>Model: {modelName()}</kbd> */}
                         <button className='secondary' style={{width: "auto", height: "auto", align: "center"}} onClick={clickFill}>Fill</button>
                     </div>
                 </div>

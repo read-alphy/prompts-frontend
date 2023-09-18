@@ -50,23 +50,28 @@ export function Input() {
 
         document.dispatchEvent(eventNewCompletion);
     }
-    
+
     useEffect(() => {
         const handleFillEvent = (event) => {
-            const { payload, promptTemplate, parameters } = event.detail;
+            const { payload, promptTemplate, parameters, model } = event.detail;
             setPayload(payload);
             setPromptTemplate(promptTemplate);
             setParameters(parameters);
+            setModel(model);
         };
         document.addEventListener('fill', handleFillEvent);
         return () => {
             document.removeEventListener('fill', handleFillEvent);
         }
     }, []);
-    
+
+    const handleModelChange = (event) => {
+        setModel(event.target.value);
+    };
+
     return (
         <form onSubmit={handleSubmit}>
-            <div className='inputTextareaHolder' style={{display: 'flex', flexDirection: 'row', flexGrow: 1, gap: '2em', padding: '2em'}}>
+            <div className='inputTextareaHolder' style={{ display: 'flex', flexDirection: 'row', flexGrow: 1, gap: '2em', padding: '2em' }}>
                 <textarea
                     value={payload}
                     onChange={(e) => setPayload(e.target.value)}
@@ -82,10 +87,21 @@ export function Input() {
                     onChange={(e) => setParameters(e.target.value)}
                     placeholder={parametersPlaceholder} />
             </div>
-            <div style={{display: 'flex', flexDirection: 'row', justifyContent: "center"}}>
-            <button type="submit" style={{width: 'auto', }}>Submit</button>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: "center", gap: "4em", alignItems: "center" }}>
+                <fieldset style={{textAlign: "left"}}>
+                    <legend><strong>Model</strong></legend>
+                    <label for="small">
+                        <input type="radio" id="gpt-3.5-turbo" name="model" value="gpt-3.5-turbo" checked={model === "gpt-3.5-turbo"} onChange={handleModelChange} />
+                        GPT-3.5 Turbo
+                    </label>
+                    <label for="medium">
+                        <input type="radio" id="gpt-4" name="model" value="gpt-4" checked={model === "gpt-4"} onChange={handleModelChange} />
+                        GPT-4
+                    </label>
+                </fieldset>
+                <button type="submit" style={{ width: 'auto', height: 'min-content' }}>Submit</button>
             </div>
         </form>
-        
+
     )
 }
