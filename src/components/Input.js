@@ -18,7 +18,7 @@ export function Input() {
             body: JSON.stringify({ payload, prompt_template: promptTemplate, parameters }),
         });
         const body = await response.text();
-        console.log(body);
+        
 
         // setPayload('');
         // setPromptTemplate('');
