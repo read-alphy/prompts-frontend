@@ -38,8 +38,6 @@ export default function Submission({ id }) {
     };
 
     useEffect(() => {
-        
-        
         getSubmission();
         return () => {
             if (ws) {
@@ -48,6 +46,15 @@ export default function Submission({ id }) {
             }
         }
     }, [id]);
+    
+    const clickFill = () => {
+        const eventFill = new CustomEvent('fill', {detail: {
+            payload,
+            promptTemplate,
+            parameters,
+        }});
+        document.dispatchEvent(eventFill);
+    }
 
     return (
         <div className='submission' id={`submission-${id}`}>
@@ -86,6 +93,9 @@ export default function Submission({ id }) {
                             {height: '30em'}
                         }
                     />
+                    <div style={{display: "flex", justifyContent: "space-around"}}>
+                        <button className='secondary' style={{width: "auto", height: "auto", align: "center"}} onClick={clickFill}>Fill</button>
+                    </div>
                 </div>
             </div>
         </div>
