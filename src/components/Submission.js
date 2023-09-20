@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { WS_URL, API_BASE, MODELS } from '../constants';
 
 
-export default function Submission({ id }) {
+export default function Submission({ id, drop }) {
     const [payload, setPayload] = useState('');
     const [promptTemplate, setPromptTemplate] = useState('');
     const [parameters, setParameters] = useState('');
@@ -61,6 +61,19 @@ export default function Submission({ id }) {
         document.dispatchEvent(eventFill);
     }
 
+
+    const clickDelete = async () => {
+        const resp = await fetch(`${API_BASE}/submissions/${id}`, {
+            method: 'DELETE',
+        });
+        if (resp.status !== 200) {
+            alert('Error deleting submission');
+        } else {
+            drop()
+        }
+    }
+
+
     return (
         <div className='submission' id={`submission-${id}`}>
             <h3>Submission {id}</h3>
@@ -98,10 +111,10 @@ export default function Submission({ id }) {
                             { height: '30em' }
                         }
                     />
-                    <div style={{ display: "flex", justifyContent: "space-around" }}>
+                    <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+                        <button className='contrast' style={{ width: "4em", height: "auto", align: "center" }} onClick={clickFill}>Fill</button>
                         <input type="text" value={MODELS[model]} readonly style={{ width: 'min-content' }} />
-                        {/* <kbd className='secondary'>Model: {modelName()}</kbd> */}
-                        <button className='secondary' style={{ width: "auto", height: "auto", align: "center" }} onClick={clickFill}>Fill</button>
+                        <button className='secondary' style={{ width: "auto", height: "auto", align: "center" }} onClick={clickDelete}>Delete</button>
                     </div>
                 </div>
             </div>

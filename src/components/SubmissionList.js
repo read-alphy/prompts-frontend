@@ -26,12 +26,17 @@ export function SubmissionList() {
             document.removeEventListener('newCompletion', handleNewCompletion);
         }
     }, []);
+    
+    const dropSubmission = (submissionId) => {
+        const newSubmissions = submissions.filter(submission => submission.id !== submissionId);
+        setSubmissions(newSubmissions);
+    }
 
     return (
         <div>
             <h1>Submissions</h1>
             {submissions.map((submission) => (
-                <Submission id={submission.id} key={submission.id}/>
+                <Submission id={submission.id} key={submission.id} drop={() => dropSubmission(submission.id)}/>
             ))}
         </div>
     )
