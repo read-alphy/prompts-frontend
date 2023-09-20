@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {WS_URL, API_BASE} from '../constants';
+import { WS_URL, API_BASE, MODELS } from '../constants';
 
 
 export default function Submission({ id }) {
@@ -9,18 +9,8 @@ export default function Submission({ id }) {
     const [result, setResult] = useState('');
     const [model, setModel] = useState('');
 
-    const modelName = () => {
-        if (model === 'gpt-3.5-turbo') {
-            return 'GPT-3.5 Turbo';
-        } else if (model === 'gpt-4') {
-            return 'GPT-4';
-        } else {
-            return model;
-        }
-    }
-
     const [ws, setWs] = useState(null);
-    
+
 
     const setupWebsocketListeners = () => {
         const socket = new WebSocket(WS_URL);
@@ -58,22 +48,24 @@ export default function Submission({ id }) {
             }
         }
     }, [id]);
-    
+
     const clickFill = () => {
-        const eventFill = new CustomEvent('fill', {detail: {
-            payload,
-            promptTemplate,
-            parameters,
-            model
-        }});
+        const eventFill = new CustomEvent('fill', {
+            detail: {
+                payload,
+                promptTemplate,
+                parameters,
+                model
+            }
+        });
         document.dispatchEvent(eventFill);
     }
 
     return (
         <div className='submission' id={`submission-${id}`}>
             <h3>Submission {id}</h3>
-            <div style={{display: 'flex', justifyContent: 'space-evenly', flexGrow: '3 5', gap: '2em', padding: '2em'}}>
-                <div style={{width: '100%'}}>
+            <div style={{ display: 'flex', justifyContent: 'space-evenly', flexGrow: '3 5', gap: '2em', padding: '2em' }}>
+                <div style={{ width: '100%' }}>
                     <div className='submission__payload'>
                         <p>Transcript</p>
                         <textarea
@@ -96,20 +88,20 @@ export default function Submission({ id }) {
                         />
                     </div>
                 </div>
-                <div className='submission__result' style={{width: '100%'}} >
+                <div className='submission__result' style={{ width: '100%' }} >
                     <p>Result</p>
                     <textarea
                         value={result}
                         readOnly
                         style={
                             // fill parent vertically but do not overflow
-                            {height: '30em'}
+                            { height: '30em' }
                         }
                     />
-                    <div style={{display: "flex", justifyContent: "space-around"}}>
-                        <input type="text" value={modelName()} readonly style={{width: 'min-content'}}/>
+                    <div style={{ display: "flex", justifyContent: "space-around" }}>
+                        <input type="text" value={MODELS[model]} readonly style={{ width: 'min-content' }} />
                         {/* <kbd className='secondary'>Model: {modelName()}</kbd> */}
-                        <button className='secondary' style={{width: "auto", height: "auto", align: "center"}} onClick={clickFill}>Fill</button>
+                        <button className='secondary' style={{ width: "auto", height: "auto", align: "center" }} onClick={clickFill}>Fill</button>
                     </div>
                 </div>
             </div>

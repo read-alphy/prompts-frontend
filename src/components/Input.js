@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { API_BASE } from '../constants';
+import { API_BASE, MODELS } from '../constants';
 
 const transcriptPlaceholder = `Put the transcript here.
 
@@ -88,16 +88,18 @@ export function Input() {
                     placeholder={parametersPlaceholder} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: "center", gap: "4em", alignItems: "center" }}>
-                <fieldset style={{textAlign: "left"}}>
+                <fieldset style={{ textAlign: "left" }}>
                     <legend><strong>Model</strong></legend>
-                    <label for="small">
-                        <input type="radio" id="gpt-3.5-turbo" name="model" value="gpt-3.5-turbo" checked={model === "gpt-3.5-turbo"} onChange={handleModelChange} />
-                        GPT-3.5 Turbo
-                    </label>
-                    <label for="medium">
-                        <input type="radio" id="gpt-4" name="model" value="gpt-4" checked={model === "gpt-4"} onChange={handleModelChange} />
-                        GPT-4
-                    </label>
+                    {
+                        Object.keys(MODELS).map((key) => {
+                            return (
+                                <label for={key}>
+                                    <input type="radio" id={key} name="model" value={key} checked={model === key} onChange={handleModelChange} />
+                                    {MODELS[key]}
+                                </label>
+                            )
+                        })
+                    }
                 </fieldset>
                 <button type="submit" style={{ width: 'auto', height: 'min-content' }}>Submit</button>
             </div>
