@@ -3,7 +3,8 @@ import { WS_URL, API_BASE, MODELS } from '../constants';
 
 
 export default function Submission({ submission, drop }) {
-    const { id, payload, promptTemplate, parameters, model } = submission;
+    const { id, payload, parameters, model } = submission;
+    const promptTemplate = submission.prompt_template;
     const [result, setResult] = useState('');
 
     // const [payload, setPayload] = useState('');
