@@ -8,9 +8,9 @@ export function SubmissionList() {
     
 
     const getSubmissions = async () => {
-        const response = await fetch(`${API_BASE}/submissions`);
+        const response = await fetch(`${API_BASE}/submissions`); //?limit=2&last_id=64`);
         let body = await response.json();
-        setSubmissions(body.reverse());
+        setSubmissions(body);
     };
 
 
@@ -36,7 +36,7 @@ export function SubmissionList() {
         <div>
             <h1>Submissions</h1>
             {submissions.map((submission) => (
-                <Submission id={submission.id} key={submission.id} drop={() => dropSubmission(submission.id)}/>
+                <Submission key={submission.id} submission={submission} drop={() => dropSubmission(submission.id)}/>
             ))}
         </div>
     )
