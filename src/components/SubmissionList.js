@@ -8,7 +8,7 @@ export function SubmissionList() {
     
 
     const getSubmissions = async () => {
-        const response = await fetch(`${API_BASE}/submissions`); //?limit=2&last_id=64`);
+        const response = await fetch(`${API_BASE}/submissions?limit=10`); 
         let body = await response.json();
         setSubmissions(body);
     };
@@ -32,12 +32,20 @@ export function SubmissionList() {
         setSubmissions(newSubmissions);
     }
 
+    const loadMoreSubmissions = async () => {
+        const lastId = submissions[submissions.length - 1].id;
+        const response = await fetch(`${API_BASE}/submissions?limit=40&last_id=${lastId}`);
+        let body = await response.json();
+        setSubmissions(prevSubmissions => [...prevSubmissions, ...body]);
+    }
+
     return (
         <div>
             <h1>Submissions</h1>
             {submissions.map((submission) => (
                 <Submission key={submission.id} submission={submission} drop={() => dropSubmission(submission.id)}/>
             ))}
+            {submissions.length && <button onClick={loadMoreSubmissions}>Load More</button>}
         </div>
     )
 }
