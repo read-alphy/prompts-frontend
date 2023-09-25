@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { WS_URL, API_BASE, MODELS } from '../constants';
+import { WS_URL_SUBMISSIONS, API_BASE, MODELS } from '../constants';
 
 
 export default function Submission({ submission, drop }) {
@@ -17,7 +17,7 @@ export default function Submission({ submission, drop }) {
 
 
     const setupWebsocketListeners = () => {
-        const socket = new WebSocket(WS_URL);
+        const socket = new WebSocket(WS_URL_SUBMISSIONS);
         socket.addEventListener("message", (event) => {
             setResult(prevResult => prevResult + event.data)
         });
