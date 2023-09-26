@@ -39,7 +39,6 @@ export function CompletionList() {
 
     return (
         <div>
-            <h1>Completions</h1>
             {completions.map((completion) => (
                 <Completion key={completion.id} completion={completion} drop={() => dropCompletion(completion.id)}/>
             ))}
