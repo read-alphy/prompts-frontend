@@ -1,13 +1,17 @@
 import './App.css';
-import {Input} from './components/Input';
-import {SubmissionList} from './components/SubmissionList';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import HomePage from './routes/HomePage';
+import Chapterization from './routes/Chapterization';
 
 function App() {
+
   return (
     <div className="App">
-      <Input />
-      <br />
-      <SubmissionList />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/chapter" element={<Chapterization />}  />
+      </Routes>
+    
     </div>
   );
 }
