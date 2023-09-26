@@ -3,7 +3,7 @@ import { WS_URL_SUBMISSIONS, API_BASE, MODELS } from '../constants';
 
 
 export default function Submission({ submission, drop }) {
-    const { id, payload, parameters, model } = submission;
+    const { id, payload, model } = submission;
     const promptTemplate = submission.prompt_template;
     const [result, setResult] = useState('');
 
@@ -65,7 +65,6 @@ export default function Submission({ submission, drop }) {
             detail: {
                 payload,
                 promptTemplate,
-                parameters,
                 model
             }
         });
@@ -101,13 +100,6 @@ export default function Submission({ submission, drop }) {
                         <p>Prompt Template</p>
                         <textarea
                             value={promptTemplate}
-                            readOnly
-                        />
-                    </div>
-                    <div className='submission__parameters'>
-                        <p>Parameters</p>
-                        <textarea
-                            value={parameters}
                             readOnly
                         />
                     </div>

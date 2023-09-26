@@ -17,18 +17,9 @@ You can also use variables:
 
 Hello {{ name }}!`;
 
-const parametersPlaceholder = `# This is a yaml file.
-
-# Parameters are passed to the model AND are used for the processing by the system. They will be used to configure the merge strategy later, for example
-
-name: Egemen
-age: 21
-`;
-
 export function Input() {
     const [payload, setPayload] = useState('');
     const [promptTemplate, setPromptTemplate] = useState('');
-    const [parameters, setParameters] = useState('');
     const [model, setModel] = useState('gpt-3.5-turbo');
 
     const eventNewCompletion = new CustomEvent('newCompletion');
@@ -40,7 +31,7 @@ export function Input() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ payload, template_str: promptTemplate, parameters, model }),
+            body: JSON.stringify({ payload, template_str: promptTemplate, model }),
         });
         // const body = await response.text();
 
@@ -53,10 +44,9 @@ export function Input() {
 
     useEffect(() => {
         const handleFillEvent = (event) => {
-            const { payload, promptTemplate, parameters, model } = event.detail;
+            const { payload, promptTemplate, model } = event.detail;
             setPayload(payload);
             setPromptTemplate(promptTemplate);
-            setParameters(parameters);
             setModel(model);
         };
         document.addEventListener('fill', handleFillEvent);
@@ -81,11 +71,6 @@ export function Input() {
                     value={promptTemplate}
                     onChange={(e) => setPromptTemplate(e.target.value)}
                     placeholder={promptTemplatePlaceholder} />
-
-                <textarea
-                    value={parameters}
-                    onChange={(e) => setParameters(e.target.value)}
-                    placeholder={parametersPlaceholder} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: "center", gap: "4em", alignItems: "center" }}>
                 <fieldset style={{ textAlign: "left" }}>
