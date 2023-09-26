@@ -35,7 +35,7 @@ export function Input() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch(`${API_BASE}/submissions`, {
+        const response = await fetch(`${API_BASE}/completions`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

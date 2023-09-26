@@ -74,7 +74,7 @@ export default function Submission({ submission, drop }) {
 
 
     const clickDelete = async () => {
-        const resp = await fetch(`${API_BASE}/submissions/${id}`, {
+        const resp = await fetch(`${API_BASE}/completions/${id}`, {
             method: 'DELETE',
         });
         if (resp.status !== 200) {

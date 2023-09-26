@@ -8,7 +8,7 @@ export function SubmissionList() {
     
 
     const getSubmissions = async () => {
-        const response = await fetch(`${API_BASE}/submissions?limit=10`); 
+        const response = await fetch(`${API_BASE}/completions?limit=10`); 
         let body = await response.json();
         setSubmissions(body);
     };
@@ -34,7 +34,7 @@ export function SubmissionList() {
 
     const loadMoreSubmissions = async () => {
         const lastId = submissions[submissions.length - 1].id;
-        const response = await fetch(`${API_BASE}/submissions?limit=40&last_id=${lastId}`);
+        const response = await fetch(`${API_BASE}/completions?limit=40&last_id=${lastId}`);
         let body = await response.json();
         setSubmissions(prevSubmissions => [...prevSubmissions, ...body]);
     }
