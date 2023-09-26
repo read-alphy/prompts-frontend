@@ -82,7 +82,7 @@ export default function Item({ item, drop, wsUrl, fillEventName, resourceUrl, it
                     </div>
                 </div>
                 <div className={`${itemTypeLower}__result`} style={{ width: '100%' }} >
-                    <p>Item</p>
+                    <p>{itemTypeCamel}</p>
                     <textarea
                         value={result}
                         readOnly

@@ -9,11 +9,7 @@ const promptTemplatePlaceholder = `This is a Jinja2 template.
 
 When you put a transcript, it is inserted into the payload variable:
 
-{{ payload }}
-
-You can also use variables:
-
-Hello {{ name }}!`;
+{{ payload }}`;
 
 
 function LandingPage() {
@@ -24,29 +20,19 @@ function LandingPage() {
   );
 }
 
-function ChapterPage() {
-  return (
-    <div>
-      <h2>Chapter List</h2>
-    </div>
-  );
-}
-
 function CompletionPage() {
-
-  const transcriptPlaceholder = `Put the transcript here.
+  const payloadPlaceholder = `Put your payload here.
 
 If a prompt template is given, this is inserted into the {{ payload }} variable.
 
 If no prompt template is given, this is directly sent to the model.`;
-
 
   return (
     <div>
       <h2>Completions</h2>
       <Input 
         promptTemplatePlaceholder={promptTemplatePlaceholder} 
-        payloadPlaceholder={transcriptPlaceholder} 
+        payloadPlaceholder={payloadPlaceholder} 
         postUrl={`${API_BASE}/completions`} 
         fillEventName='fillCompletion'
         createdEventName='newCompletion'
@@ -60,7 +46,36 @@ If no prompt template is given, this is directly sent to the model.`;
         itemType={'Completion'}
         payloadType={'Payload'}
       />
-      {/* <CompletionList /> */}
+    </div>
+  );
+}
+
+function ChapterPage() {
+  const transcriptPlaceholder = `Put the transcript here.
+
+If a prompt template is given, this is inserted into the {{ payload }} variable.
+
+If no prompt template is given, this is directly sent to the model.`;
+
+  return (
+    <div>
+      <h2>Chapters</h2>
+      <Input 
+        promptTemplatePlaceholder={promptTemplatePlaceholder} 
+        payloadPlaceholder={transcriptPlaceholder} 
+        postUrl={`${API_BASE}/chapters`} 
+        fillEventName='fillChapter'
+        createdEventName='newChapter'
+      />
+      <br />
+      <List 
+        resourceUrl={`${API_BASE}/chapters`}
+        createdEventName={'newChapter'}
+        fillEventName={'fillChapter'}
+        wsUrl={`${WS_PREFIX}/chapters/ws`}
+        itemType={'Chapter'}
+        payloadType={'Transcript'}
+      />
     </div>
   );
 }
