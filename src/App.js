@@ -1,13 +1,13 @@
 import './App.css';
-import {Input} from './components/Input';
-import {SubmissionList} from './components/SubmissionList';
+import {CompletionInput} from './components/completions/CompletionInput';
+import {CompletionList} from './components/completions/CompletionList';
 
 function App() {
   return (
     <div className="App">
-      <Input />
+      <CompletionInput />
       <br />
-      <SubmissionList />
+      <CompletionList />
     </div>
   );
 }

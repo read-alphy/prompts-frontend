@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { WS_URL_SUBMISSIONS, API_BASE, MODELS } from '../constants';
+import { WS_URL_SUBMISSIONS, API_BASE, MODELS } from '../../constants';
 
 
-export default function Submission({ submission, drop }) {
-    const { id, payload, model } = submission;
-    const promptTemplate = submission.prompt_template;
+export default function Completion({ completion, drop }) {
+    const { id, payload, model } = completion;
+    const promptTemplate = completion.prompt_template;
     const [result, setResult] = useState('');
-
-    // const [payload, setPayload] = useState('');
-    // const [promptTemplate, setPromptTemplate] = useState('');
-    // const [parameters, setParameters] = useState('');
-    // const [result, setResult] = useState('');
-    // const [model, setModel] = useState('');
 
     const [ws, setWs] = useState(null);
 
@@ -27,26 +21,9 @@ export default function Submission({ submission, drop }) {
         return socket;
     };
 
-    // const getSubmission = async (data) => {
-    //     const response = await fetch(`${API_BASE}/submissions/${id}`);
-    //     const body = await response.json();
-    //     setPayload(body.payload);
-    //     setPromptTemplate(body.prompt_template);
-    //     setParameters(body.parameters);
-    //     setModel(body.model);
-
-    //     if (body.result) {
-    //         setResult(body.result);
-    //     } else {
-    //         const socket = setupWebsocketListeners();
-    //         setWs(socket);
-    //     }
-    // };
-
     useEffect(() => {
-        // getSubmission();
-        if (submission.result) {
-            setResult(submission.result);
+        if (completion.result) {
+            setResult(completion.result);
         } else {
             const socket = setupWebsocketListeners();
             setWs(socket);
@@ -77,7 +54,7 @@ export default function Submission({ submission, drop }) {
             method: 'DELETE',
         });
         if (resp.status !== 200) {
-            alert('Error deleting submission');
+            alert('Error deleting completion');
         } else {
             drop()
         }
@@ -85,18 +62,18 @@ export default function Submission({ submission, drop }) {
 
 
     return (
-        <div className='submission' id={`submission-${id}`}>
-            <h3>Submission {id}</h3>
+        <div className='completion' id={`completion-${id}`}>
+            <h3>Completion {id}</h3>
             <div style={{ display: 'flex', justifyContent: 'space-evenly', flexGrow: '3 5', gap: '2em', padding: '2em' }}>
                 <div style={{ width: '100%' }}>
-                    <div className='submission__payload'>
+                    <div className='completion__payload'>
                         <p>Transcript</p>
                         <textarea
                             value={payload}
                             readOnly
                         />
                     </div>
-                    <div className='submission__prompt-template'>
+                    <div className='completion__prompt-template'>
                         <p>Prompt Template</p>
                         <textarea
                             value={promptTemplate}
@@ -104,7 +81,7 @@ export default function Submission({ submission, drop }) {
                         />
                     </div>
                 </div>
-                <div className='submission__result' style={{ width: '100%' }} >
+                <div className='completion__result' style={{ width: '100%' }} >
                     <p>Result</p>
                     <textarea
                         value={result}

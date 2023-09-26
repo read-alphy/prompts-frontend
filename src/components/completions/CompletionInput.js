@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { API_BASE, MODELS } from '../constants';
+import { API_BASE, MODELS } from '../../constants';
 
 const transcriptPlaceholder = `Put the transcript here.
 
@@ -17,7 +17,7 @@ You can also use variables:
 
 Hello {{ name }}!`;
 
-export function Input() {
+export function CompletionInput() {
     const [payload, setPayload] = useState('');
     const [promptTemplate, setPromptTemplate] = useState('');
     const [model, setModel] = useState('gpt-3.5-turbo');
