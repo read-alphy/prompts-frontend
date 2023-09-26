@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { WS_URL_SUBMISSIONS, API_BASE, MODELS } from '../../constants';
+import { MODELS } from '../constants';
 
 
-export default function Completion({ completion, drop }) {
-    const { id, payload, model } = completion;
-    const promptTemplate = completion.prompt_template;
+export default function Item({ item, drop, wsUrl, fillEventName, resourceUrl, itemType, payloadType }) {
+    const { id, payload, model } = item;
+    const promptTemplate = item.prompt_template;
     const [result, setResult] = useState('');
 
     const [ws, setWs] = useState(null);
 
+    const itemTypeLower = itemType.toLowerCase();
+    const itemTypeCamel = itemType.charAt(0).toUpperCase() + itemTypeLower.slice(1);
 
     const setupWebsocketListeners = () => {
-        const socket = new WebSocket(WS_URL_SUBMISSIONS);
+        const socket = new WebSocket(wsUrl);
         socket.addEventListener("message", (event) => {
             setResult(prevResult => prevResult + event.data)
         });
@@ -22,8 +24,8 @@ export default function Completion({ completion, drop }) {
     };
 
     useEffect(() => {
-        if (completion.result) {
-            setResult(completion.result);
+        if (item.result) {
+            setResult(item.result);
         } else {
             const socket = setupWebsocketListeners();
             setWs(socket);
@@ -38,7 +40,7 @@ export default function Completion({ completion, drop }) {
     }, [id]);
 
     const clickFill = () => {
-        const eventFill = new CustomEvent('fill', {
+        const eventFill = new CustomEvent(fillEventName, {
             detail: {
                 payload,
                 promptTemplate,
@@ -48,32 +50,30 @@ export default function Completion({ completion, drop }) {
         document.dispatchEvent(eventFill);
     }
 
-
     const clickDelete = async () => {
-        const resp = await fetch(`${API_BASE}/completions/${id}`, {
+        const resp = await fetch(`${resourceUrl}/${id}`, {
             method: 'DELETE',
         });
         if (resp.status !== 200) {
-            alert('Error deleting completion');
+            alert('Error deleting item');
         } else {
             drop()
         }
     }
 
-
     return (
-        <div className='completion' id={`completion-${id}`}>
-            <h3>Completion {id}</h3>
+        <div className={itemTypeLower} id={`${itemTypeLower}-${id}`}>
+            <h3>{itemTypeCamel} {id}</h3>
             <div style={{ display: 'flex', justifyContent: 'space-evenly', flexGrow: '3 5', gap: '2em', padding: '2em' }}>
                 <div style={{ width: '100%' }}>
-                    <div className='completion__payload'>
-                        <p>Transcript</p>
+                    <div className={`${itemTypeLower}__payload`}>
+                        <p>{payloadType}</p>
                         <textarea
                             value={payload}
                             readOnly
                         />
                     </div>
-                    <div className='completion__prompt-template'>
+                    <div className={`${itemTypeLower}__prompt-template`}>
                         <p>Prompt Template</p>
                         <textarea
                             value={promptTemplate}
@@ -81,8 +81,8 @@ export default function Completion({ completion, drop }) {
                         />
                     </div>
                 </div>
-                <div className='completion__result' style={{ width: '100%' }} >
-                    <p>Result</p>
+                <div className={`${itemTypeLower}__result`} style={{ width: '100%' }} >
+                    <p>Item</p>
                     <textarea
                         value={result}
                         readOnly
@@ -93,7 +93,7 @@ export default function Completion({ completion, drop }) {
                     />
                     <div style={{ display: "flex", justifyContent: "space-evenly" }}>
                         <button className='contrast' style={{ width: "4em", height: "auto", align: "center" }} onClick={clickFill}>Fill</button>
-                        <input type="text" value={MODELS[model]} readonly style={{ width: 'min-content' }} />
+                        <input type="text" value={MODELS[model]} readOnly style={{ width: 'min-content' }} />
                         <button className='secondary' style={{ width: "auto", height: "auto", align: "center" }} onClick={clickDelete}>Delete</button>
                     </div>
                 </div>

@@ -1,32 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { API_BASE, MODELS } from '../../constants';
+import { MODELS } from '../constants';
 
-const transcriptPlaceholder = `Put the transcript here.
 
-If a prompt template is given, this is inserted into the {{ payload }} variable.
-
-If no prompt template is given, this is directly sent to the model.`;
-
-const promptTemplatePlaceholder = `This is a Jinja2 template.
-
-When you put a transcript, it is inserted into the payload variable:
-
-{{ payload }}
-
-You can also use variables:
-
-Hello {{ name }}!`;
-
-export function CompletionInput() {
+export function Input({ payloadPlaceholder, promptTemplatePlaceholder, postUrl, fillEventName, createdEventName}) {
     const [payload, setPayload] = useState('');
     const [promptTemplate, setPromptTemplate] = useState('');
     const [model, setModel] = useState('gpt-3.5-turbo');
 
-    const eventNewCompletion = new CustomEvent('newCompletion');
+    const eventNewCompletion = new CustomEvent(createdEventName);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch(`${API_BASE}/completions`, {
+        const response = await fetch(postUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -49,9 +34,9 @@ export function CompletionInput() {
             setPromptTemplate(promptTemplate);
             setModel(model);
         };
-        document.addEventListener('fill', handleFillEvent);
+        document.addEventListener(fillEventName, handleFillEvent);
         return () => {
-            document.removeEventListener('fill', handleFillEvent);
+            document.removeEventListener(fillEventName, handleFillEvent);
         }
     }, []);
 
@@ -65,7 +50,7 @@ export function CompletionInput() {
                 <textarea
                     value={payload}
                     onChange={(e) => setPayload(e.target.value)}
-                    placeholder={transcriptPlaceholder}
+                    placeholder={payloadPlaceholder}
                 />
                 <textarea
                     value={promptTemplate}
@@ -78,7 +63,7 @@ export function CompletionInput() {
                     {
                         Object.keys(MODELS).map((key) => {
                             return (
-                                <label for={key}>
+                                <label htmlFor={key} key={key}>
                                     <input type="radio" id={key} name="model" value={key} checked={model === key} onChange={handleModelChange} />
                                     {MODELS[key]}
                                 </label>
