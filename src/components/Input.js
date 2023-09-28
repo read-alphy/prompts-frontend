@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { MODELS } from '../constants';
+import { MODELS, SUBMISSION_TYPES } from '../constants';
 
 
 export function Input({ payloadPlaceholder, promptTemplatePlaceholder, postUrl, fillEventName, createdEventName}) {
     const [payload, setPayload] = useState('');
     const [promptTemplate, setPromptTemplate] = useState('');
     const [model, setModel] = useState('gpt-3.5-turbo');
+    const [submissionType, setSubmissionType] = useState('completions');
 
     const eventNewCompletion = new CustomEvent(createdEventName);
 
@@ -16,23 +17,18 @@ export function Input({ payloadPlaceholder, promptTemplatePlaceholder, postUrl, 
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ payload, template_str: promptTemplate, model }),
+            body: JSON.stringify({ payload, 'prompt_template': promptTemplate, model, 'sub_type': SUBMISSION_TYPES[submissionType].singular }),
         });
-        // const body = await response.text();
-
-        // setPayload('');
-        // setPromptTemplate('');
-        // setParameters('');
-
         document.dispatchEvent(eventNewCompletion);
     }
 
     useEffect(() => {
         const handleFillEvent = (event) => {
-            const { payload, promptTemplate, model } = event.detail;
+            const { payload, promptTemplate, model, subType } = event.detail;
             setPayload(payload);
             setPromptTemplate(promptTemplate);
             setModel(model);
+            setSubmissionType(subType);
         };
         document.addEventListener(fillEventName, handleFillEvent);
         return () => {
@@ -42,6 +38,10 @@ export function Input({ payloadPlaceholder, promptTemplatePlaceholder, postUrl, 
 
     const handleModelChange = (event) => {
         setModel(event.target.value);
+    };
+
+    const handleSubmissionTypeChange = (event) => {
+        setSubmissionType(event.target.value);
     };
 
     return (
@@ -57,7 +57,20 @@ export function Input({ payloadPlaceholder, promptTemplatePlaceholder, postUrl, 
                     onChange={(e) => setPromptTemplate(e.target.value)}
                     placeholder={promptTemplatePlaceholder} />
             </div>
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: "center", gap: "4em", alignItems: "center" }}>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: "center", gap: "4em" }}>
+                <fieldset style={{ textAlign: "left" }}>
+                    <legend><strong>Submission Type</strong></legend>
+                    {
+                        Object.keys(SUBMISSION_TYPES).map((key) => {
+                            return (
+                                <label htmlFor={key} key={key}>
+                                    <input type="radio" id={key} name="submissionType" value={key} checked={submissionType === key} onChange={handleSubmissionTypeChange} />
+                                    {SUBMISSION_TYPES[key].label}
+                                </label>
+                            )
+                        })
+                    }
+                </fieldset>
                 <fieldset style={{ textAlign: "left" }}>
                     <legend><strong>Model</strong></legend>
                     {

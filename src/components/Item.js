@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { MODELS } from '../constants';
+import { MODELS, SUBMISSION_TYPES, WS_PREFIX, subTypeLabel, subTypeSingular } from '../constants';
 
+const completionsListenerDelta = (event, prevResult) => {
+    return prevResult + event.data;
+}
 
-export default function Item({ item, drop, wsUrl, fillEventName, resourceUrl, itemType, payloadType }) {
+const chaptersListenerDelta = (event, prevResult) => {
+    const lines = JSON.parse(event.data).map((chapter) => `${chapter.index + 1}: ${chapter.title}`)
+
+    return prevResult + lines.join('\n') + '\n';
+}
+
+export default function Item({ item, drop, fillEventName, resourceUrl, itemType, payloadType }) {
     const { id, payload, model } = item;
     const promptTemplate = item.prompt_template;
+    const subType = item.sub_type + 's';
     const [result, setResult] = useState('');
 
     const [ws, setWs] = useState(null);
@@ -13,9 +23,23 @@ export default function Item({ item, drop, wsUrl, fillEventName, resourceUrl, it
     const itemTypeCamel = itemType.charAt(0).toUpperCase() + itemTypeLower.slice(1);
 
     const setupWebsocketListeners = () => {
+        let wsUrl
+        if (subType === 'completions') {
+            wsUrl = `${WS_PREFIX}/submissions/ws/completions`;
+        } else if (subType === 'chapters') {
+            wsUrl = `${WS_PREFIX}/submissions/ws/chapters`;
+        } else {
+            alert(`Unknown submission type ${subType}, for item ${JSON.stringify(item)}`);
+        }
         const socket = new WebSocket(wsUrl);
         socket.addEventListener("message", (event) => {
-            setResult(prevResult => prevResult + event.data)
+            if (subType === 'completions') {
+                setResult(prevResult => completionsListenerDelta(event, prevResult));
+            } else if (subType === 'chapters') {
+                setResult(prevResult => chaptersListenerDelta(event, prevResult));
+            } else {
+            alert(`Unknown submission type ${subType}, for item ${JSON.stringify(item)}`);
+            }
         });
         socket.addEventListener("open", (_) => {
             socket.send(id);
@@ -44,7 +68,8 @@ export default function Item({ item, drop, wsUrl, fillEventName, resourceUrl, it
             detail: {
                 payload,
                 promptTemplate,
-                model
+                model,
+                subType,
             }
         });
         document.dispatchEvent(eventFill);
@@ -93,6 +118,7 @@ export default function Item({ item, drop, wsUrl, fillEventName, resourceUrl, it
                     />
                     <div style={{ display: "flex", justifyContent: "space-evenly" }}>
                         <button className='contrast' style={{ width: "4em", height: "auto", align: "center" }} onClick={clickFill}>Fill</button>
+                        <input type="text" value={SUBMISSION_TYPES[subType].label} readOnly style={{ width: 'min-content' }} />
                         <input type="text" value={MODELS[model]} readOnly style={{ width: 'min-content' }} />
                         <button className='secondary' style={{ width: "auto", height: "auto", align: "center" }} onClick={clickDelete}>Delete</button>
                     </div>

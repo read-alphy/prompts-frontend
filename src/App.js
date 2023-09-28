@@ -20,8 +20,38 @@ function LandingPage() {
   );
 }
 
-function CompletionPage() {
-  const payloadPlaceholder = `Put your payload here.
+// function CompletionPage() {
+//   const payloadPlaceholder = `Put your payload here.
+
+// If a prompt template is given, this is inserted into the {{ payload }} variable.
+
+// If no prompt template is given, this is directly sent to the model.`;
+
+//   return (
+//     <div>
+//       <h2>Completions</h2>
+//       <Input 
+//         promptTemplatePlaceholder={promptTemplatePlaceholder} 
+//         payloadPlaceholder={payloadPlaceholder} 
+//         postUrl={`${API_BASE}/completions`} 
+//         fillEventName='fillCompletion'
+//         createdEventName='newCompletion'
+//       />
+//       <br />
+//       <List 
+//         resourceUrl={`${API_BASE}/completions`}
+//         createdEventName={'newCompletion'}
+//         fillEventName={'fillCompletion'}
+//         wsUrl={`${WS_PREFIX}/completions/ws`}
+//         itemType={'Completion'}
+//         payloadType={'Payload'}
+//       />
+//     </div>
+//   );
+// }
+
+function SubmissionPage() {
+  const transcriptPlaceholder = `Put your payload or the transcript here.
 
 If a prompt template is given, this is inserted into the {{ payload }} variable.
 
@@ -29,52 +59,21 @@ If no prompt template is given, this is directly sent to the model.`;
 
   return (
     <div>
-      <h2>Completions</h2>
-      <Input 
-        promptTemplatePlaceholder={promptTemplatePlaceholder} 
-        payloadPlaceholder={payloadPlaceholder} 
-        postUrl={`${API_BASE}/completions`} 
-        fillEventName='fillCompletion'
-        createdEventName='newCompletion'
-      />
-      <br />
-      <List 
-        resourceUrl={`${API_BASE}/completions`}
-        createdEventName={'newCompletion'}
-        fillEventName={'fillCompletion'}
-        wsUrl={`${WS_PREFIX}/completions/ws`}
-        itemType={'Completion'}
-        payloadType={'Payload'}
-      />
-    </div>
-  );
-}
-
-function ChapterPage() {
-  const transcriptPlaceholder = `Put the transcript here.
-
-If a prompt template is given, this is inserted into the {{ payload }} variable.
-
-If no prompt template is given, this is directly sent to the model.`;
-
-  return (
-    <div>
-      <h2>Chapters</h2>
+      <h2>Submissions</h2>
       <Input 
         promptTemplatePlaceholder={promptTemplatePlaceholder} 
         payloadPlaceholder={transcriptPlaceholder} 
-        postUrl={`${API_BASE}/chapters`} 
-        fillEventName='fillChapter'
-        createdEventName='newChapter'
+        postUrl={`${API_BASE}/submissions`} 
+        fillEventName='fillSubmission'
+        createdEventName='newSubmission'
       />
       <br />
       <List 
-        resourceUrl={`${API_BASE}/chapters`}
-        createdEventName={'newChapter'}
-        fillEventName={'fillChapter'}
-        wsUrl={`${WS_PREFIX}/chapters/ws`}
-        itemType={'Chapter'}
-        payloadType={'Transcript'}
+        resourceUrl={`${API_BASE}/submissions`}
+        createdEventName={'newSubmission'}
+        fillEventName={'fillSubmission'}
+        itemType={'Submission'}
+        payloadType={'Payload or Transcript'}
       />
     </div>
   );
@@ -84,21 +83,21 @@ If no prompt template is given, this is directly sent to the model.`;
 function App() {
   return (
     <div className="App" style={{ height: '100vh' }}>
-      <nav style={{ paddingTop: "1em", paddingBottom: "1em", paddingLeft: "3em", paddingRight: "3em" }}>
+      {/* <nav style={{ paddingTop: "1em", paddingBottom: "1em", paddingLeft: "3em", paddingRight: "3em" }}>
         <ul>
           <li><a href="/"><strong>Prompts</strong></a></li>
         </ul>
         <ul>
-          <li><a href="/completions">Completions</a></li>
-          <li><a href="/chapters">Chapters</a></li>
+          <li><a href="/submissions">Submissions</a></li>
         </ul>
-      </nav>
+      </nav> */}
+    
+    <SubmissionPage />
 
-      <Routes>
+      {/* <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/completions" element={<CompletionPage />} />
-        <Route path="/chapters" element={<ChapterPage />} />
-      </Routes>
+        <Route path="/submissions" element={<SubmissionPage />} />
+      </Routes> */}
     </div>
   );
 }

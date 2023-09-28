@@ -5,6 +5,17 @@ export const API_BASE = `http${SSL ? 's' : ''}://${API_HOST}`;
 
 export const MODELS = {
     'gpt-3.5-turbo': 'GPT-3.5 Turbo',
-    'gpt-3.5-turbo-instruct': 'GPT-3.5 Turbo Instruct',
+    // 'gpt-3.5-turbo-instruct': 'GPT-3.5 Turbo Instruct',
     'gpt-4': 'GPT-4',
 };
+
+export const SUBMISSION_TYPES = {
+    'chapters': {
+        label: 'Chapter',
+        singular: 'chapter',
+    },
+    'completions': {
+        label: 'Completion',
+        singular: 'completion',
+    }
+}
