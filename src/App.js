@@ -1,6 +1,5 @@
-import { Routes, Route} from 'react-router-dom';
 import './App.css';
-import { API_BASE, WS_PREFIX } from './constants';
+import { API_BASE } from './constants';
 import { Input } from './components/Input';
 import { List } from './components/List';
 
@@ -12,13 +11,13 @@ When you put a transcript, it is inserted into the payload variable:
 {{ payload }}`;
 
 
-function LandingPage() {
-  return (
-    <div style={{ display: "flex", justifyContent: 'center', alignItems: 'center', paddingTop: '30vh' }}>
-      <h2>Welcome</h2>
-    </div>
-  );
-}
+// function LandingPage() {
+//   return (
+//     <div style={{ display: "flex", justifyContent: 'center', alignItems: 'center', paddingTop: '30vh' }}>
+//       <h2>Welcome</h2>
+//     </div>
+//   );
+// }
 
 // function CompletionPage() {
 //   const payloadPlaceholder = `Put your payload here.

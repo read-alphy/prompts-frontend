@@ -12,7 +12,7 @@ export function Input({ payloadPlaceholder, promptTemplatePlaceholder, postUrl, 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch(postUrl, {
+        const _response = await fetch(postUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
