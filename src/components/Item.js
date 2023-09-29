@@ -9,16 +9,19 @@ const chaptersDisplayChapters = (chaptersJson) => {
     if (!chaptersJson) {
         return '';
     }
-    console.log("chaptersJson: ", chaptersJson)
     const chapters = JSON.parse(chaptersJson);
     return chapters.map((chapter) => `${chapter.index + 1}  -  ${chapter.timestamp}\n${chapter.title}`).join('\n\n');
 }
 
 const chaptersListenerDelta = (event, prevResult) => {
-    // console.log("event.data: ", event.data)
-    const formattedChunk = chaptersDisplayChapters(event.data)
-    // console.log("lines: ", lines)
-    return prevResult + formattedChunk + '\n\n';
+    let got;
+    if (prevResult === '') {
+        got = []
+    } else {
+        got = JSON.parse(prevResult)
+    }
+    const add = JSON.parse(event.data)
+    return JSON.stringify(got.concat(add))
 }
 
 export default function Item({ item, drop, fillEventName, resourceUrl, itemType, payloadType }) {
